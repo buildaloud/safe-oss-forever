@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# SafeOSS Forever — Installer
+# curl -fsSL https://safe-oss-forever.com/install | sh
+
+set -e
+
+BOLD='\033[1m'
+TEAL='\033[0;36m'
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+DIM='\033[2m'
+RESET='\033[0m'
+
+REPO="https://raw.githubusercontent.com/buildaloud/safe-oss-forever/main"
+INSTALL_DIR="/usr/local/bin"
+BIN_NAME="safe-oss"
+
+echo ""
+echo -e "${TEAL}${BOLD}🛡️  SafeOSS Forever — Installer${RESET}"
+echo -e "${TEAL}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
+echo ""
+echo -e "  Checking your system for open source exposure..."
+sleep 0.6
+
+# Try /usr/local/bin, fall back to ~/bin
+if [ -w "$INSTALL_DIR" ]; then
+  TARGET="$INSTALL_DIR/$BIN_NAME"
+else
+  TARGET="$HOME/bin/$BIN_NAME"
+  mkdir -p "$HOME/bin"
+  echo -e "  ${DIM}Note: installing to ~/bin — make sure it's in your PATH${RESET}"
+fi
+
+echo -e "  Downloading purge engine..."
+sleep 0.5
+
+if curl -fsSL "$REPO/bin/safe-oss" -o "$TARGET" 2>/dev/null; then
+  chmod +x "$TARGET"
+  echo -e "  ${GREEN}✓${RESET} Installed to ${BOLD}${TARGET}${RESET}"
+  echo ""
+  echo -e "  ${BOLD}Ready to secure your projects:${RESET}"
+  echo ""
+  echo -e "    safe-oss javascript"
+  echo -e "    safe-oss python"
+  echo -e "    safe-oss java"
+  echo ""
+  echo -e "  ${TEAL}https://safe-oss-forever.com${RESET}"
+  echo -e "  ${DIM}Happy April 1st 🎉${RESET}"
+  echo ""
+else
+  echo -e "  ${RED}✗ Download failed.${RESET}"
+  echo -e "  Try: ${BOLD}curl -fsSL $REPO/bin/safe-oss > safe-oss && chmod +x safe-oss${RESET}"
+  echo ""
+  exit 1
+fi
